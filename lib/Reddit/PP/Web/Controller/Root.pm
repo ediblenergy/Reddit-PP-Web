@@ -3,22 +3,19 @@ use warnings;
 
 package Reddit::PP::Web::Controller::Root;
 
-use base 'Catalyst::Controller';
+use base 'Reddit::PP::Web::Controller';
 
-use Data::Dumper::Concise;
+use Moose;
 
 sub base : CaptureArgs(0) : PathPart('') : Chained('/') {
-    my($self,$c) = @_;
-    $c->stash->{reddit_port} = ['base'];
+    my ( $self, $ctx ) = @_;
+    $ctx->stash->{reddit_port} = ['base'];
 }
 
 sub base_index : Args(0) : PathPart('') : Chained('base') {
-    warn '/';
+    my ( $self, $ctx ) = @_;
+    push @{ $ctx->stash->{reddit_port} }, 'base_index';
 }
 
-sub end : ActionClass('RenderView') {
-    my ( $self, $c ) = @_;
-    $c->response->body( Dumper( $c->stash->{reddit_port} ) );
-}
 
 1;
